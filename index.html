@@ -383,6 +383,7 @@
       border-radius: 10px;
       background: rgba(199,154,88,.07);
       font-size: 17px;
+      transition: .35s ease;
     }
 
     .contact-icon svg {
@@ -470,25 +471,25 @@
       color: #62b9e9;
     }
 
-    /* Phone unlocked buttons */
+    /* Phone unlocked */
 
     .phone-tools {
       display: flex;
       align-items: center;
-      gap: 7px;
-      margin-right: 4px;
+      gap: 5px;
+      margin-right: 3px;
       flex-shrink: 0;
     }
 
     .phone-tool {
       height: 32px;
-      padding: 0 10px;
+      padding: 0 8px;
       border: 1px solid rgba(199,154,88,.22);
       border-radius: 8px;
       color: var(--bronze-light);
       background: rgba(199,154,88,.05);
       cursor: pointer;
-      font: 600 10px/1 inherit;
+      font: 600 9px/1 inherit;
       white-space: nowrap;
       transition: .2s ease;
     }
@@ -500,16 +501,20 @@
     }
 
     .phone-unlocked {
-      animation: phoneUnlock .55s ease;
+      animation: phoneUnlock .65s ease;
     }
 
     @keyframes phoneUnlock {
-      from {
+      0% {
         opacity: .35;
-        transform: scale(.98);
+        transform: scale(.97);
       }
 
-      to {
+      55% {
+        transform: scale(1.015);
+      }
+
+      100% {
         opacity: 1;
         transform: scale(1);
       }
@@ -579,7 +584,9 @@
       letter-spacing: 1.5px;
     }
 
-    /* PIN Modal */
+    /* =========================
+       PIN MODAL
+       ========================= */
 
     .modal-overlay {
       position: fixed;
@@ -589,13 +596,11 @@
       align-items: center;
       justify-content: center;
       padding: 20px;
-      background: rgba(2,5,9,.72);
-      backdrop-filter: blur(10px);
+      background: rgba(2,5,9,.76);
+      backdrop-filter: blur(12px);
       opacity: 0;
       visibility: hidden;
-      transition:
-        opacity .25s ease,
-        visibility .25s ease;
+      transition: opacity .25s ease, visibility .25s ease;
     }
 
     .modal-overlay.active {
@@ -605,15 +610,17 @@
 
     .modal {
       width: min(100%, 350px);
-      padding: 28px 24px 23px;
+      padding: 28px 24px 24px;
       text-align: center;
-      border: 1px solid rgba(199,154,88,.35);
-      border-radius: 19px;
-      background: #101821;
+      border: 1px solid rgba(199,154,88,.38);
+      border-radius: 20px;
+      background:
+        linear-gradient(145deg, rgba(255,255,255,.035), transparent 45%),
+        #101821;
       box-shadow:
         0 30px 80px rgba(0,0,0,.65),
-        0 0 35px rgba(199,154,88,.08);
-      transform: translateY(15px) scale(.97);
+        0 0 40px rgba(199,154,88,.1);
+      transform: translateY(15px) scale(.96);
       transition: transform .3s cubic-bezier(.2,.8,.2,1);
     }
 
@@ -623,54 +630,106 @@
 
     .modal-lock {
       margin-bottom: 13px;
-      font-size: 28px;
+      font-size: 30px;
+      transition: transform .35s ease;
+    }
+
+    .modal.unlocking .modal-lock,
+    .modal.success .modal-lock {
+      animation: unlockIcon .65s ease;
+    }
+
+    @keyframes unlockIcon {
+      0%   { transform: rotate(0) scale(1); }
+      25%  { transform: rotate(-12deg) scale(1.08); }
+      50%  { transform: rotate(12deg) scale(1.15); }
+      75%  { transform: rotate(-5deg) scale(1.08); }
+      100% { transform: rotate(0) scale(1); }
     }
 
     .modal h2 {
       margin: 0;
       font-size: 19px;
+      font-weight: 700;
     }
 
     .modal p {
-      margin: 8px 0 18px;
+      margin: 8px 0 20px;
       color: var(--muted);
       font-size: 11px;
     }
 
-    .pin-input {
-      width: 100%;
-      height: 50px;
-      padding: 0 15px;
+    .pin-dots {
+      display: flex;
       direction: ltr;
-      text-align: center;
-      color: var(--text);
-      outline: none;
-      border: 1px solid rgba(255,255,255,.1);
-      border-radius: 11px;
-      background: rgba(0,0,0,.25);
-      font: 700 20px monospace;
-      letter-spacing: 8px;
-      transition:
-        border-color .2s ease,
-        box-shadow .2s ease;
+      justify-content: center;
+      gap: 13px;
+      margin: 4px 0 8px;
+      cursor: text;
     }
 
-    .pin-input:focus {
-      border-color: var(--bronze);
-      box-shadow: 0 0 0 3px rgba(199,154,88,.1);
+    .pin-dot {
+      width: 15px;
+      height: 15px;
+      border: 1px solid rgba(199,154,88,.42);
+      border-radius: 50%;
+      background: transparent;
+      transition:
+        background .18s ease,
+        border-color .18s ease,
+        transform .18s ease,
+        box-shadow .18s ease;
+    }
+
+    .pin-dot.filled {
+      border-color: var(--bronze-light);
+      background: var(--bronze-light);
+      box-shadow: 0 0 13px rgba(226,189,124,.35);
+      transform: scale(1.08);
+    }
+
+    .pin-dot.wrong {
+      border-color: #df8d7e;
+      background: #df8d7e;
+      box-shadow: 0 0 12px rgba(223,141,126,.25);
+    }
+
+    .pin-input {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      opacity: 0;
+      pointer-events: none;
     }
 
     .error {
-      min-height: 19px;
+      min-height: 36px;
       margin-top: 8px;
       color: #df8d7e;
       font-size: 11px;
+      line-height: 1.7;
+    }
+
+    .error.show {
+      animation: errorIn .25s ease;
+    }
+
+    @keyframes errorIn {
+      from {
+        opacity: 0;
+        transform: translateY(-3px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     .modal-actions {
       display: flex;
       gap: 8px;
-      margin-top: 10px;
+      margin-top: 6px;
     }
 
     .modal-btn {
@@ -691,6 +750,7 @@
 
     .confirm-btn:hover {
       background: #efd095;
+      transform: translateY(-1px);
     }
 
     .cancel-btn {
@@ -704,15 +764,22 @@
       border-color: rgba(255,255,255,.2);
     }
 
-    .shake {
-      animation: shake .35s ease;
+    .pin-shake {
+      animation: pinShake .4s ease;
     }
 
-    @keyframes shake {
+    @keyframes pinShake {
+      0%,100% { transform: translateX(0); }
       20% { transform: translateX(7px); }
       40% { transform: translateX(-7px); }
       60% { transform: translateX(5px); }
       80% { transform: translateX(-4px); }
+    }
+
+    .modal.success .pin-dot {
+      border-color: #9bd39b;
+      background: #9bd39b;
+      box-shadow: 0 0 13px rgba(155,211,155,.3);
     }
 
     /* Love modal */
@@ -823,12 +890,17 @@
       }
 
       .phone-tools {
-        gap: 4px;
+        gap: 3px;
       }
 
       .phone-tool {
-        padding: 0 7px;
-        font-size: 9px;
+        padding: 0 6px;
+        font-size: 8px;
+      }
+
+      .pin-dot {
+        width: 14px;
+        height: 14px;
       }
     }
 
@@ -878,7 +950,6 @@
 
       </header>
 
-
       <!-- QR -->
 
       <section class="qr-section" aria-label="QR Code">
@@ -899,7 +970,6 @@
         </p>
 
       </section>
-
 
       <!-- Contacts -->
 
@@ -947,7 +1017,6 @@
 
         </div>
 
-
         <!-- INSTAGRAM -->
 
         <a
@@ -965,6 +1034,7 @@
               aria-hidden="true"
               focusable="false"
             >
+
               <rect
                 x="3"
                 y="3"
@@ -991,6 +1061,7 @@
                 r="1.2"
                 fill="currentColor"
               />
+
             </svg>
 
           </div>
@@ -1025,7 +1096,6 @@
           </div>
 
         </a>
-
 
         <!-- TELEGRAM -->
 
@@ -1087,7 +1157,6 @@
 
       </section>
 
-
       <!-- Quick actions -->
 
       <div class="quick-actions">
@@ -1110,7 +1179,6 @@
 
       </div>
 
-
       <footer class="footer">
         Scan → Save → Connect
       </footer>
@@ -1118,7 +1186,6 @@
     </section>
 
   </main>
-
 
   <!-- Toast -->
 
@@ -1128,7 +1195,6 @@
     role="status"
     aria-live="polite"
   ></div>
-
 
   <!-- PIN MODAL -->
 
@@ -1143,23 +1209,46 @@
 
     <div class="modal">
 
-      <div class="modal-lock">
+      <div
+        id="modalLock"
+        class="modal-lock"
+      >
         🔐
       </div>
 
-      <h2 id="modalTitle">شماره تلفن قفل است</h2>
-<p>رمزشو می‌خوای شیطون؟ 😏❤️</p>
+      <h2 id="modalTitle">
+        شماره تلفن قفل است
+      </h2>
+
+      <p id="modalHint">
+        رمزشو می‌خوای شیطون؟ 😏❤️
+      </p>
+
+      <!-- PIN DOTS -->
+
+      <div
+        id="pinDots"
+        class="pin-dots"
+        onclick="focusPin()"
+        aria-label="رمز چهار رقمی"
+      >
+
+        <span class="pin-dot"></span>
+        <span class="pin-dot"></span>
+        <span class="pin-dot"></span>
+        <span class="pin-dot"></span>
+
+      </div>
 
       <input
         id="pinInput"
         class="pin-input"
-        type="password"
+        type="tel"
         inputmode="numeric"
         maxlength="4"
         autocomplete="off"
-        placeholder="••••"
         aria-label="رمز چهار رقمی"
-        oninput="this.value=this.value.replace(/\D/g,'').slice(0,4)"
+        oninput="handlePinInput()"
         onkeydown="if(event.key === 'Enter') checkPin()"
       >
 
@@ -1193,16 +1282,14 @@
 
   </div>
 
-
   <!-- QR CODE LIBRARY -->
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
-
   <script>
 
     /* =====================================================
-       PHONE SETTINGS
+       SETTINGS
        ===================================================== */
 
     const PHONE = "+989141209514";
@@ -1211,6 +1298,7 @@
       "https://mahdi3355.github.io/";
 
     /* رمز تلفن */
+
     const PIN = "3576";
 
 
@@ -1247,15 +1335,52 @@
     const phoneRow =
       document.getElementById("phoneRow");
 
+    const pinDots =
+      document.querySelectorAll(".pin-dot");
+
+    const modalHint =
+      document.getElementById("modalHint");
+
+    const modalLock =
+      document.getElementById("modalLock");
+
+    const modalTitle =
+      document.getElementById("modalTitle");
+
 
     let pinSuccessAction = "call";
 
+    let pinAttempts = 0;
+
 
     /* =====================================================
-       OPEN PHONE PIN
+       WRONG PIN MESSAGES
        ===================================================== */
 
-    function openPinModal(action = "call") {
+    const wrongMessages = [
+
+      "نه نه 😏 دوباره فکر کن!",
+
+      "نزدیک بود... ولی نه 😈",
+
+      "این که رمز نیست شیطون 😂🔐",
+
+      "داری شانستو امتحان می‌کنی؟ 😂",
+
+      "اوه اوه... هنوز پیداش نکردی؟ 😏",
+
+      "فکر کنم باید از صاحب شماره بپرسی 😌🔐"
+
+    ];
+
+
+    /* =====================================================
+       OPEN PIN MODAL
+       ===================================================== */
+
+    function openPinModal(
+      action = "call"
+    ) {
 
       /*
         اگر قبلاً رمز درست وارد شده،
@@ -1277,18 +1402,56 @@
         }
 
         return;
+
       }
 
 
       pinSuccessAction = action;
 
-      modal.classList.add("active");
+      pinAttempts = 0;
 
-      pinError.textContent = "";
 
-      pinInput.value = "";
+      modal.classList.remove(
+        "success",
+        "pin-shake"
+      );
 
-      document.body.style.overflow = "hidden";
+
+      modalLock.textContent =
+        "🔐";
+
+
+      modalTitle.textContent =
+        "شماره تلفن قفل است";
+
+
+      modalHint.textContent =
+        "رمزشو می‌خوای شیطون؟ 😏❤️";
+
+
+      pinError.textContent =
+        "";
+
+      pinError.classList.remove(
+        "show"
+      );
+
+
+      pinInput.value =
+        "";
+
+
+      updatePinDots();
+
+
+      modal.classList.add(
+        "active"
+      );
+
+
+      document.body.style.overflow =
+        "hidden";
+
 
       setTimeout(() => {
 
@@ -1300,33 +1463,168 @@
 
 
     /* =====================================================
-       CLOSE PIN MODAL
+       CLOSE MODAL
        ===================================================== */
 
     function closePinModal() {
 
-      modal.classList.remove("active");
+      modal.classList.remove(
+        "active"
+      );
 
-      document.body.style.overflow = "";
 
-      pinInput.value = "";
+      document.body.style.overflow =
+        "";
 
-      pinError.textContent = "";
+
+      pinInput.value =
+        "";
+
+
+      pinError.textContent =
+        "";
+
+
+      updatePinDots();
 
     }
 
 
     /* =====================================================
-       CLICK OUTSIDE MODAL
+       FOCUS PIN
        ===================================================== */
 
-    function overlayClick(event) {
+    function focusPin() {
 
-      if (event.target === modal) {
+      pinInput.focus();
 
-        closePinModal();
+    }
+
+
+    /* =====================================================
+       UPDATE PIN DOTS
+       ===================================================== */
+
+    function updatePinDots() {
+
+      const length =
+        pinInput.value.length;
+
+
+      pinDots.forEach(
+        (dot, index) => {
+
+          dot.classList.toggle(
+            "filled",
+            index < length
+          );
+
+          dot.classList.remove(
+            "wrong"
+          );
+
+        }
+      );
+
+    }
+
+
+    /* =====================================================
+       PIN INPUT
+       ===================================================== */
+
+    function handlePinInput() {
+
+      pinInput.value =
+        pinInput.value
+          .replace(/\D/g, "")
+          .slice(0, 4);
+
+
+      updatePinDots();
+
+
+      if (
+        pinInput.value.length === 4
+      ) {
+
+        setTimeout(() => {
+
+          checkPin();
+
+        }, 100);
 
       }
+
+    }
+
+
+    /* =====================================================
+       WRONG PIN
+       ===================================================== */
+
+    function showWrongPin() {
+
+      const messageIndex =
+        Math.min(
+          pinAttempts - 1,
+          wrongMessages.length - 1
+        );
+
+
+      pinError.textContent =
+        wrongMessages[
+          messageIndex
+        ];
+
+
+      pinError.classList.remove(
+        "show"
+      );
+
+
+      void pinError.offsetWidth;
+
+
+      pinError.classList.add(
+        "show"
+      );
+
+
+      pinDots.forEach(
+        dot => {
+
+          dot.classList.add(
+            "wrong"
+          );
+
+        }
+      );
+
+
+      modal.classList.remove(
+        "pin-shake"
+      );
+
+
+      void modal.offsetWidth;
+
+
+      modal.classList.add(
+        "pin-shake"
+      );
+
+
+      setTimeout(() => {
+
+        pinInput.value =
+          "";
+
+        updatePinDots();
+
+        pinInput.focus();
+
+      }, 450);
 
     }
 
@@ -1337,42 +1635,108 @@
 
     function checkPin() {
 
-      if (pinInput.value === PIN) {
+      if (
+        pinInput.value.length !== 4
+      ) {
 
-        unlockPhone();
+        pinError.textContent =
+          "چهار رقم رمز رو وارد کن 😏";
 
-        closePinModal();
+        pinError.classList.add(
+          "show"
+        );
+
+        pinInput.focus();
+
+        return;
+
+      }
 
 
-        /*
-          اگر کاربر از دکمه ذخیره مخاطب آمده،
-          بعد از رمز مستقیم فایل را ذخیره کن.
-        */
+      /* رمز صحیح */
 
-        if (
-          pinSuccessAction === "save"
-        ) {
+      if (
+        pinInput.value === PIN
+      ) {
 
-          setTimeout(() => {
+        modal.classList.add(
+          "success"
+        );
 
-            downloadVCard();
 
-          }, 150);
+        modalLock.textContent =
+          "🔓";
 
-        }
+
+        pinDots.forEach(
+          dot => {
+
+            dot.classList.add(
+              "filled"
+            );
+
+          }
+        );
+
+
+        modalTitle.textContent =
+          "دسترسی تأیید شد ✓";
+
+
+        modalHint.textContent =
+          "بالاخره پیداش کردی 😏❤️";
+
+
+        pinError.textContent =
+          "";
+
+
+        setTimeout(() => {
+
+          unlockPhone();
+
+          closePinModal();
+
+
+          if (
+            pinSuccessAction === "save"
+          ) {
+
+            setTimeout(() => {
+
+              downloadVCard();
+
+            }, 150);
+
+          }
+
+        }, 800);
+
 
       } else {
 
-        pinError.textContent =
-          "رمز اشتباه است";
+        /* رمز اشتباه */
 
-        pinInput.classList.remove("shake");
+        pinAttempts++;
 
-        void pinInput.offsetWidth;
+        showWrongPin();
 
-        pinInput.classList.add("shake");
+      }
 
-        pinInput.select();
+    }
+
+
+    /* =====================================================
+       OVERLAY CLICK
+       ===================================================== */
+
+    function overlayClick(event) {
+
+      if (
+        event.target === modal
+      ) {
+
+        closePinModal();
 
       }
 
@@ -1385,16 +1749,25 @@
 
     function unlockPhone() {
 
-      phoneRow.dataset.unlocked = "true";
+      phoneRow.dataset.unlocked =
+        "true";
 
-      phoneRow.classList.remove("locked");
 
-      phoneRow.classList.add("phone-unlocked");
+      phoneRow.classList.remove(
+        "locked"
+      );
+
+
+      phoneRow.classList.add(
+        "phone-unlocked"
+      );
+
 
       phoneRow.setAttribute(
         "role",
         "group"
       );
+
 
       phoneRow.setAttribute(
         "aria-label",
@@ -1405,11 +1778,15 @@
       /* تغییر قفل به تلفن */
 
       const icon =
-        phoneRow.querySelector(".contact-icon");
+        phoneRow.querySelector(
+          ".contact-icon"
+        );
+
 
       if (icon) {
 
-        icon.textContent = "☎";
+        icon.textContent =
+          "☎";
 
       }
 
@@ -1417,11 +1794,16 @@
       /* نمایش شماره */
 
       const value =
-        phoneRow.querySelector(".contact-value");
+        phoneRow.querySelector(
+          ".contact-value"
+        );
+
 
       if (value) {
 
-        value.textContent = PHONE;
+        value.textContent =
+          PHONE;
+
 
         value.classList.remove(
           "lock-badge"
@@ -1433,28 +1815,36 @@
       /* فلش */
 
       const arrow =
-        phoneRow.querySelector(".contact-arrow");
+        phoneRow.querySelector(
+          ".contact-arrow"
+        );
+
 
       if (arrow) {
 
-        arrow.textContent = "›";
+        arrow.textContent =
+          "›";
 
       }
 
 
-      /*
-        دکمه‌های تماس و ذخیره
-      */
+      /* ابزارها */
 
       if (
-        !phoneRow.querySelector(".phone-tools")
+        !phoneRow.querySelector(
+          ".phone-tools"
+        )
       ) {
 
         const tools =
-          document.createElement("div");
+          document.createElement(
+            "div"
+          );
+
 
         tools.className =
           "phone-tools";
+
 
         tools.innerHTML = `
 
@@ -1469,6 +1859,14 @@
           <button
             class="phone-tool"
             type="button"
+            onclick="event.stopPropagation(); copyText(PHONE)"
+          >
+            📋 کپی
+          </button>
+
+          <button
+            class="phone-tool"
+            type="button"
             onclick="event.stopPropagation(); downloadVCard()"
           >
             💾 ذخیره
@@ -1476,13 +1874,16 @@
 
         `;
 
-        phoneRow.appendChild(tools);
+
+        phoneRow.appendChild(
+          tools
+        );
 
       }
 
 
       /*
-        کلیک روی خود کارت تلفن
+        کلیک روی کارت بعد از باز شدن
         = تماس
       */
 
@@ -1498,6 +1899,7 @@
             return;
 
           }
+
 
           callPhone();
 
@@ -1524,7 +1926,7 @@
 
 
     /* =====================================================
-       CALL PHONE
+       CALL
        ===================================================== */
 
     function callPhone() {
@@ -1539,23 +1941,36 @@
        TOAST
        ===================================================== */
 
-    function showToast(message) {
+    function showToast(
+      message
+    ) {
 
       const toast =
-        document.getElementById("toast");
+        document.getElementById(
+          "toast"
+        );
 
-      toast.textContent = message;
 
-      toast.classList.add("show");
+      toast.textContent =
+        message;
+
+
+      toast.classList.add(
+        "show"
+      );
+
 
       clearTimeout(
         window.__toastTimer
       );
 
+
       window.__toastTimer =
         setTimeout(() => {
 
-          toast.classList.remove("show");
+          toast.classList.remove(
+            "show"
+          );
 
         }, 1800);
 
@@ -1586,24 +2001,39 @@
           text
         );
 
+
         showToast(
           "کپی شد ✓"
         );
 
+
       } catch {
 
         const area =
-          document.createElement("textarea");
+          document.createElement(
+            "textarea"
+          );
 
-        area.value = text;
 
-        document.body.appendChild(area);
+        area.value =
+          text;
+
+
+        document.body.appendChild(
+          area
+        );
+
 
         area.select();
 
-        document.execCommand("copy");
+
+        document.execCommand(
+          "copy"
+        );
+
 
         area.remove();
+
 
         showToast(
           "کپی شد ✓"
@@ -1615,21 +2045,19 @@
 
 
     /* =====================================================
-       SAVE CONTACT BUTTON
+       SAVE CONTACT
        ===================================================== */
 
     function saveContact() {
 
-      /*
-        اگر شماره قفل است،
-        اول رمز می‌خواهد.
-      */
-
       if (
-        phoneRow.dataset.unlocked !== "true"
+        phoneRow.dataset.unlocked !==
+        "true"
       ) {
 
-        openPinModal("save");
+        openPinModal(
+          "save"
+        );
 
         return;
 
@@ -1642,7 +2070,7 @@
 
 
     /* =====================================================
-       DOWNLOAD VCARD
+       VCARD
        ===================================================== */
 
     function downloadVCard() {
@@ -1665,7 +2093,9 @@
 
         "END:VCARD"
 
-      ].join("\r\n");
+      ].join(
+        "\r\n"
+      );
 
 
       const blob =
@@ -1679,28 +2109,43 @@
 
 
       const url =
-        URL.createObjectURL(blob);
+        URL.createObjectURL(
+          blob
+        );
 
 
       const a =
-        document.createElement("a");
+        document.createElement(
+          "a"
+        );
 
-      a.href = url;
+
+      a.href =
+        url;
+
 
       a.download =
         "mehdi-darbandi.vcf";
 
-      document.body.appendChild(a);
+
+      document.body.appendChild(
+        a
+      );
+
 
       a.click();
 
+
       a.remove();
 
-      URL.revokeObjectURL(url);
+
+      URL.revokeObjectURL(
+        url
+      );
 
 
       showToast(
-        "فایل مخاطب آماده شد ✓"
+        "مخاطب آماده شد ✓"
       );
 
     }
@@ -1726,7 +2171,9 @@
       };
 
 
-      if (navigator.share) {
+      if (
+        navigator.share
+      ) {
 
         try {
 
@@ -1761,7 +2208,9 @@
 
         if (
           event.key === "Escape" &&
-          modal.classList.contains("active")
+          modal.classList.contains(
+            "active"
+          )
         ) {
 
           closePinModal();
@@ -1772,7 +2221,6 @@
     );
 
   </script>
-
 
   <!-- LOVE MODAL -->
 
@@ -1818,12 +2266,10 @@
 
   </div>
 
-
   <script>
 
     /*
       Love modal
-      بدون نقش‌آفرینی عاشقانه.
     */
 
     (function() {
@@ -1848,7 +2294,9 @@
 
       function openLove(url) {
 
-        modal.classList.add("show");
+        modal.classList.add(
+          "show"
+        );
 
         modal.setAttribute(
           "aria-hidden",
@@ -1863,9 +2311,11 @@
         yes.style.transform =
           "scale(1)";
 
-        yes.style.fontSize = "";
+        yes.style.fontSize =
+          "";
 
-        yes.style.padding = "";
+        yes.style.padding =
+          "";
 
         no.style.transform =
           "scale(1)";
@@ -1878,14 +2328,17 @@
         const url =
           modal.dataset.url;
 
+
         modal.classList.remove(
           "show"
         );
+
 
         modal.setAttribute(
           "aria-hidden",
           "true"
         );
+
 
         if (url) {
 
@@ -1913,16 +2366,19 @@
               5.5
             );
 
+
           yes.style.transform =
             "scale(" +
             yesScale +
             ")";
+
 
           yes.style.fontSize =
             Math.min(
               16 * yesScale,
               52
             ) + "px";
+
 
           yes.style.padding =
             Math.min(
@@ -1936,10 +2392,13 @@
             ) +
             "px";
 
+
           no.style.transform =
             "scale(" +
             Math.max(
-              1 / Math.sqrt(yesScale),
+              1 / Math.sqrt(
+                yesScale
+              ),
               .55
             ) +
             ")";
@@ -1948,9 +2407,7 @@
       );
 
 
-      /*
-        Instagram / Telegram
-      */
+      /* Instagram / Telegram */
 
       document.addEventListener(
         "click",
@@ -1961,34 +2418,51 @@
               "a,button"
             );
 
+
           if (!el) return;
+
 
           const text =
             (
               el.textContent || ""
             ).toLowerCase();
 
+
           const href =
             el.getAttribute(
               "href"
             ) || "";
 
+
           const combined =
-            text + " " + href;
+            text +
+            " " +
+            href;
+
 
           const isSocial =
             /instagram|telegram|اینستاگرام|تلگرام|@mahdi/i
-              .test(combined);
+              .test(
+                combined
+              );
+
 
           if (!isSocial) return;
 
+
           if (
-            el.closest("#loveModal")
+            el.closest(
+              "#loveModal"
+            )
           ) return;
+
 
           e.preventDefault();
 
-          openLove(href);
+
+          openLove(
+            href
+          );
 
         },
         true
